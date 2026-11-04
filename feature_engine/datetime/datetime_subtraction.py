@@ -372,3 +372,15 @@ class DatetimeSubtraction(BaseCreation):
                 for var in self.variables_
             ]
         return feature_names
+
+    def _add_new_feature_names(self, feature_names):
+        """Add generated feature names, excluding dropped originals."""
+
+        if self.drop_original:
+            columns_to_drop = set(self.variables_ + self.reference_)
+            feature_names = [
+                name for name in feature_names
+                if name not in columns_to_drop
+            ]
+
+        return feature_names + self._get_new_features_name()
