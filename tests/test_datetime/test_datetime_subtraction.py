@@ -365,6 +365,43 @@ def test_get_feature_names_out():
     tr.fit(df)
     assert tr.get_feature_names_out() == input_vars + new
 
+    tr = DatetimeSubtraction(
+        variables="d1",
+        reference="d2",
+        drop_original=True,
+    )
+    tr.fit(df)
+
+    assert tr.get_feature_names_out() == [
+        "d3",
+        "d4",
+        "d1_sub_d2",
+    ]
+
+    tr = DatetimeSubtraction(
+        variables=["d1", "d2"],
+        reference=["d3", "d4"],
+        drop_original=True,
+    )
+    tr.fit(df)
+
+    assert tr.get_feature_names_out() == [
+        "d1_sub_d3",
+        "d2_sub_d3",
+        "d1_sub_d4",
+        "d2_sub_d4",
+    ]
+
+    tr = DatetimeSubtraction(
+        variables=["d1", "d2"],
+        reference=["d3", "d4"],
+        new_variables_names=new,
+        drop_original=True,
+    )
+    tr.fit(df)
+
+    assert tr.get_feature_names_out() == new
+
 
 # common tests
 estimator = [DatetimeSubtraction(variables=["date1"], reference=["date2"])]
